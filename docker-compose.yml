@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    container_name: mysql
+    ports:
+      - "3307:3306"  # 로컬의 3307 포트로 MySQL에 접근
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234  # root 비밀번호 설정
+      MYSQL_DATABASE: mydb  # 생성할 데이터베이스
+      MYSQL_USER: user  # 사용자 설정
+      MYSQL_PASSWORD: 1234  # 사용자 비밀번호 설정
+    volumes:
+      - mysql-data:/var/lib/mysql  # 데이터 지속성을 위한 볼륨 설정
+    networks:
+      - docker-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    container_name: spring
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/mydb  # MySQL의 서비스명인 db로 연결
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=1234
+    depends_on:
+      - db  # db가 먼저 실행되고 연결될 때까지 대기
+    networks:
+      - docker-network
+
+networks:
+  docker-network:
+    driver: bridge
+
+volumes:
+  mysql-data:  # MySQL 데이터를 저장할 볼륨 설정
