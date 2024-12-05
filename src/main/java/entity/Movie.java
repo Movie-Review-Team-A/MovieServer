@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor // JPA에서 필수, 빈 객체 생성.
 @AllArgsConstructor // 모든 필드를 초기화하는 생성자.
-@Builder // 원하는 필드만 초기화하며 객체 생성
 @Table(name = "movie") // DB의 테이블 이름이 클래스 이름과 다를 경우 매핑 할 테이블의 이름을 지정하는 어노테이션
 public class Movie {
 
