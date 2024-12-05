@@ -7,10 +7,9 @@ import dto.ReviewResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api") // 기본 URL 설정
@@ -31,4 +30,17 @@ public class ReviewController {
         // 201 Created 상태 코드로 DTO 반환
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
+
+    // 평점 이상인 리뷰 조회
+    @GetMapping("/reviews")
+    public ResponseEntity<List<ReviewResponseDTO>> findMinRatingReviews(
+            @RequestParam Long movieId,
+            @RequestParam Double minRating) {
+
+        List<ReviewResponseDTO> reviews = reviewService.findMinRatingReviews(movieId, minRating);
+
+        // 200 OK 상태 코드로 리뷰 리스트 반환
+        return ResponseEntity.status(HttpStatus.OK).body(reviews);
+    }
+
 }

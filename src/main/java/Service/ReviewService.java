@@ -49,4 +49,22 @@ public class ReviewService {
                 review.toReviewResponseDTO().getCreatedAt()
         );
     }
+
+    // 평점 이상인 리뷰 조회
+    public List<ReviewResponseDTO> findMinRatingReviews(Long movieId, Double minRating) {
+
+        List<Review> reviews = reviewRepository.findByMovieIdAndMinRating(movieId, minRating);
+
+        // 리뷰가 없을 경우 예외 처리
+        if (reviews.isEmpty()) {
+            throw new IllegalArgumentException("해당 영화의 평점이 " + minRating + "점 이상인 리뷰가 없습니다.");
+        }
+
+        List<ReviewResponseDTO> reviewResponseDTOs = reviews.stream()
+                .map(review -> review.toReviewResponseDTO())
+                .toList();
+
+        return reviewResponseDTOs;
+    }
+
 }
