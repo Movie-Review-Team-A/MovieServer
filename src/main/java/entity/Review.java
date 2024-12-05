@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "review") // DB의 테이블 이름이 클래스 이름과 다를 경우 매핑 할 테이블의 이름을 지정하는 어노테이션
 public class Review {
 
